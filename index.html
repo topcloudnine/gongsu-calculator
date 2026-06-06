@@ -8,8 +8,6 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="./vendor/html2canvas.min.js"></script>
-    <script src="./vendor/jspdf.umd.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -27,12 +25,319 @@
         }
       };
     </script>
+    <style>
+      .pdf-avoid-break {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .print-report {
+        display: none;
+      }
+
+      @media print {
+        @page {
+          size: A4 portrait;
+          margin: 14mm;
+        }
+
+        html,
+        body {
+          width: 100%;
+          min-height: auto;
+          margin: 0;
+          overflow-x: hidden !important;
+          background: #ffffff !important;
+          color: #172033 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .app-screen {
+          display: none !important;
+        }
+
+        .print-report {
+          display: block !important;
+          width: 100% !important;
+          max-width: 180mm !important;
+          margin: 0 auto !important;
+          overflow-x: hidden !important;
+          transform: none !important;
+          scale: 1 !important;
+          opacity: 1 !important;
+          filter: none !important;
+          backdrop-filter: none !important;
+          box-shadow: none !important;
+          isolation: auto !important;
+          position: static !important;
+          background: #ffffff !important;
+          color: #172033 !important;
+          font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+            "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+          font-size: 11pt;
+          line-height: 1.45;
+        }
+
+        .print-report * {
+          box-sizing: border-box;
+          max-width: 100%;
+          min-width: 0;
+          letter-spacing: 0;
+          overflow-wrap: anywhere;
+          transform: none !important;
+          opacity: 1 !important;
+          filter: none !important;
+          backdrop-filter: none !important;
+          box-shadow: none !important;
+          position: static !important;
+        }
+
+        .print-report::before,
+        .print-report::after,
+        .print-report *::before,
+        .print-report *::after {
+          content: none !important;
+          display: none !important;
+          opacity: 0 !important;
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+
+        .print-cover,
+        .print-section,
+        .print-chart,
+        .print-bar-row,
+        .print-summary-row,
+        tr {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .print-cover {
+          padding: 6mm;
+          margin-bottom: 7mm;
+          border: 1px solid #d8e0ea;
+          border-left: 2mm solid #0f2a4a;
+          border-radius: 3mm;
+          background: #f5f8fb !important;
+        }
+
+        .print-cover h1 {
+          margin: 0;
+          color: #0f2a4a;
+          font-size: 21pt;
+          font-weight: 800;
+        }
+
+        .print-cover p {
+          margin: 3mm 0 0;
+          color: #172033;
+          font-size: 10pt;
+          font-weight: 700;
+        }
+
+        .print-meta {
+          margin-top: 5mm;
+          display: inline-block;
+          padding: 2mm 3mm;
+          border: 1px solid #d8e0ea;
+          border-radius: 2mm;
+          background: #ffffff !important;
+          color: #0f2a4a;
+          font-size: 9pt;
+          font-weight: 800;
+        }
+
+        .print-summary-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 4mm;
+          width: 100%;
+          margin-bottom: 7mm;
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .print-summary-card {
+          min-height: 24mm;
+          padding: 4mm;
+          border: 1px solid #d8e0ea;
+          border-radius: 3mm;
+          background: #ffffff !important;
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .print-summary-card span {
+          display: block;
+          color: #64748b;
+          font-size: 8.5pt;
+          font-weight: 800;
+        }
+
+        .print-summary-card strong {
+          display: block;
+          margin-top: 3mm;
+          color: #0f2a4a;
+          font-size: 15pt;
+          font-weight: 800;
+          line-height: 1.15;
+          word-break: break-word;
+        }
+
+        .print-section {
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          overflow-y: visible;
+          margin: 0 0 6mm;
+          padding: 5mm;
+          border: 1px solid #d8e0ea;
+          border-radius: 3mm;
+          background: #ffffff !important;
+        }
+
+        .print-section h2 {
+          margin: 0 0 4mm;
+          padding-left: 3mm;
+          border-left: 1.5mm solid #0f2a4a;
+          color: #172033;
+          font-size: 15pt;
+          font-weight: 800;
+        }
+
+        .print-table {
+          width: 100%;
+          max-width: 100%;
+          table-layout: fixed;
+          border-collapse: collapse;
+          page-break-inside: auto;
+        }
+
+        .print-table thead {
+          display: table-header-group;
+        }
+
+        .print-table th {
+          background: #f5f8fb !important;
+          color: #0f2a4a !important;
+          border-top: 1px solid #0f2a4a;
+          border-bottom: 1px solid #d8e0ea;
+          padding: 3mm;
+          text-align: left;
+          font-size: 9.5pt;
+          font-weight: 800;
+          word-break: break-word;
+          overflow-wrap: anywhere;
+        }
+
+        .print-table td {
+          border-bottom: 1px solid #d8e0ea;
+          border-left: 0;
+          border-right: 0;
+          border-top: 0;
+          padding: 3mm;
+          color: #172033;
+          font-size: 9.5pt;
+          font-weight: 700;
+          word-break: break-word;
+          overflow-wrap: anywhere;
+        }
+
+        .print-table th:last-child,
+        .print-table td:last-child {
+          text-align: right;
+        }
+
+        .print-pie-wrap {
+          display: grid;
+          grid-template-columns: minmax(0, 54mm) minmax(0, 1fr);
+          gap: 6mm;
+          align-items: center;
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .print-pie {
+          width: 100%;
+          max-width: 54mm;
+          height: auto;
+          aspect-ratio: 1 / 1;
+        }
+
+        .print-legend-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 2.5mm 0;
+          border-bottom: 1px solid #d8e0ea;
+          color: #172033;
+          font-weight: 800;
+          gap: 4mm;
+        }
+
+        .print-legend-row:last-child {
+          border-bottom: 0;
+        }
+
+        .print-dot {
+          display: inline-block;
+          width: 3mm;
+          height: 3mm;
+          margin-right: 2mm;
+          border-radius: 999px;
+          vertical-align: middle;
+        }
+
+        .print-bar-row {
+          display: grid;
+          grid-template-columns: minmax(18mm, 25mm) minmax(0, 1fr) minmax(16mm, 22mm);
+          gap: 4mm;
+          align-items: center;
+          width: 100%;
+          max-width: 100%;
+          margin-bottom: 3mm;
+        }
+
+        .print-bar-label {
+          font-weight: 800;
+        }
+
+        .print-bar-track {
+          height: 7mm;
+          max-width: 100%;
+          overflow: hidden;
+          border-radius: 2mm;
+          background: #f5f8fb !important;
+        }
+
+        .print-bar-fill {
+          height: 100%;
+          max-width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          padding-right: 2mm;
+          color: #ffffff;
+          font-size: 9pt;
+          font-weight: 800;
+          white-space: nowrap;
+        }
+
+        .print-bar-value {
+          color: #0f2a4a;
+          text-align: right;
+          font-weight: 800;
+        }
+      }
+    </style>
   </head>
   <body class="bg-white text-ink antialiased">
     <div id="root"></div>
 
     <script type="text/babel">
-      const { useMemo, useRef, useState } = React;
+      const { useMemo, useState } = React;
 
       const roles = [
         { id: "planner", label: "기획자", chartLabel: "기획", initialHours: 80 },
@@ -41,6 +346,20 @@
         { id: "developer", label: "개발자", chartLabel: "개발", initialHours: 240 },
         { id: "etc", label: "기타", chartLabel: "기타", initialHours: 0 }
       ];
+      const chartColors = {
+        planner: "#0f2a4a",
+        designer: "#2563eb",
+        publisher: "#14b8a6",
+        developer: "#7c3aed",
+        etc: "#64748b"
+      };
+      const printChartColors = {
+        planner: "#0f2a4a",
+        designer: "#2563eb",
+        publisher: "#14b8a6",
+        developer: "#7c3aed",
+        etc: "#64748b"
+      };
 
       const inputBase =
         "w-full rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-navy focus:ring-4 focus:ring-navy/10";
@@ -66,6 +385,33 @@
 
       function formatPercent(value) {
         return `${formatNumber(value, 1)}%`;
+      }
+
+      function formatDateTimeForFileName(date) {
+        const pad = (value) => String(value).padStart(2, "0");
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const day = pad(date.getDate());
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+        return `${year}-${month}-${day}_${hours}-${minutes}`;
+      }
+
+      function sanitizeFileName(value) {
+        return value
+          .trim()
+          .replace(/[\\/:*?"<>|]/g, "")
+          .replace(/\s+/g, "")
+          .slice(0, 40);
+      }
+
+      function createPrintFileName(projectName) {
+        const dateTime = formatDateTimeForFileName(new Date());
+        const safeProjectName = sanitizeFileName(projectName);
+        const prefix = safeProjectName
+          ? `${safeProjectName}_MM리포트`
+          : "역할별MM계산결과";
+        return `${prefix}_${dateTime}.pdf`;
       }
 
       function NumberField({ id, label, value, min = 0, suffix, onChange }) {
@@ -198,8 +544,60 @@
         );
       }
 
-      function AllocationChart({ roles }) {
-        const maxHours = Math.max(...roles.map((role) => role.hours), 1);
+      function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+        const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180;
+        return {
+          x: centerX + radius * Math.cos(angleInRadians),
+          y: centerY + radius * Math.sin(angleInRadians)
+        };
+      }
+
+      function describeArc(centerX, centerY, radius, startAngle, endAngle) {
+        const start = polarToCartesian(centerX, centerY, radius, endAngle);
+        const end = polarToCartesian(centerX, centerY, radius, startAngle);
+        const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+        return [
+          "M",
+          centerX,
+          centerY,
+          "L",
+          start.x,
+          start.y,
+          "A",
+          radius,
+          radius,
+          0,
+          largeArcFlag,
+          0,
+          end.x,
+          end.y,
+          "Z"
+        ].join(" ");
+      }
+
+      function AllocationPieChart({ roles, totalHours }) {
+        if (totalHours <= 0) {
+          return null;
+        }
+
+        let currentAngle = 0;
+        const slices = roles
+          .filter((role) => role.hours > 0)
+          .map((role) => {
+            const angle = (role.hours / totalHours) * 360;
+            const startAngle = currentAngle;
+            const endAngle = currentAngle + angle;
+            const labelPoint = polarToCartesian(140, 140, 82, startAngle + angle / 2);
+            currentAngle = endAngle;
+
+            return {
+              ...role,
+              startAngle,
+              endAngle,
+              labelPoint
+            };
+          });
 
         return (
           <div className="rounded-lg border border-line bg-white p-5 shadow-soft sm:p-6">
@@ -207,26 +605,120 @@
               <div>
                 <h2 className="text-lg font-bold text-ink">역할별 투입 비중</h2>
                 <p className="mt-1 text-sm text-slate-500">
-                  막대가 길수록 해당 역할의 작업 시간이 더 큽니다.
+                  현재 작업 시간 기준으로 역할별 비중을 확인합니다.
                 </p>
               </div>
             </div>
 
-            <div className="space-y-4">
-              {roles.map((role) => (
-                <div key={role.id}>
-                  <div className="mb-2 flex items-center justify-between gap-3">
-                    <span className="text-sm font-bold text-ink">{role.chartLabel}</span>
-                    <span className="text-sm font-semibold text-slate-500">
-                      {formatMM(role.mm)} · {formatPercent(role.percent)}
+            <div className="grid gap-6 lg:grid-cols-[300px_1fr] lg:items-center">
+              <div className="mx-auto w-full max-w-[300px]">
+                <svg
+                  viewBox="0 0 280 280"
+                  role="img"
+                  aria-label="역할별 투입 비중 파이 차트"
+                  className="h-auto w-full"
+                >
+                  {slices.map((role) => (
+                    <path
+                      key={role.id}
+                      d={describeArc(140, 140, 118, role.startAngle, role.endAngle)}
+                      fill={chartColors[role.id]}
+                      stroke="#ffffff"
+                      strokeWidth="3"
+                    />
+                  ))}
+                  <circle cx="140" cy="140" r="52" fill="#ffffff" />
+                  <text
+                    x="140"
+                    y="134"
+                    textAnchor="middle"
+                    className="fill-slate-500 text-[13px] font-bold"
+                  >
+                    총 작업
+                  </text>
+                  <text
+                    x="140"
+                    y="156"
+                    textAnchor="middle"
+                    className="fill-navy text-[18px] font-extrabold"
+                  >
+                    {formatHours(totalHours)}
+                  </text>
+                  {slices.map((role) => (
+                    <text
+                      key={`${role.id}-label`}
+                      x={role.labelPoint.x}
+                      y={role.labelPoint.y}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      className="fill-white text-[12px] font-extrabold"
+                    >
+                      {formatPercent(role.percent)}
+                    </text>
+                  ))}
+                </svg>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {roles.map((role) => (
+                  <div
+                    key={role.id}
+                    className="flex items-center justify-between gap-3 rounded-lg border border-line bg-mist px-4 py-3"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="h-3 w-3 rounded-full"
+                        style={{ backgroundColor: chartColors[role.id] }}
+                      ></span>
+                      <span className="text-sm font-bold text-ink">{role.chartLabel}</span>
+                    </div>
+                    <span className="text-sm font-extrabold text-navy">
+                      {formatPercent(role.percent)}
                     </span>
                   </div>
-                  <div className="h-4 overflow-hidden rounded-full bg-mist">
-                    <div
-                      className="h-full rounded-full bg-navy transition-all"
-                      style={{ width: `${role.hours > 0 ? Math.max((role.hours / maxHours) * 100, 4) : 0}%` }}
-                    ></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function RoleMmBarChart({ roles }) {
+        const maxMM = Math.max(...roles.map((role) => role.mm), 1);
+
+        return (
+          <div className="rounded-lg border border-line bg-white p-5 shadow-soft sm:p-6">
+            <div className="mb-5">
+              <h2 className="text-lg font-bold text-ink">역할별 MM 비교</h2>
+              <p className="mt-1 text-sm text-slate-500">
+                역할별 MM 값을 가로 막대로 비교합니다.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {roles.map((role) => (
+                <div key={role.id} className="grid gap-2 sm:grid-cols-[90px_1fr_82px] sm:items-center">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-3 w-3 rounded-full"
+                      style={{ backgroundColor: chartColors[role.id] }}
+                    ></span>
+                    <span className="text-sm font-bold text-ink">{role.chartLabel}</span>
                   </div>
+                  <div className="h-8 overflow-hidden rounded-lg bg-mist">
+                    <div
+                      className="flex h-full items-center justify-end rounded-lg pr-3 text-xs font-extrabold text-white transition-all"
+                      style={{
+                        width: `${role.mm > 0 ? Math.max((role.mm / maxMM) * 100, 7) : 0}%`,
+                        backgroundColor: chartColors[role.id]
+                      }}
+                    >
+                      {role.mm > 0 ? formatMM(role.mm) : ""}
+                    </div>
+                  </div>
+                  <p className="text-right text-sm font-extrabold text-navy">
+                    {formatMM(role.mm)}
+                  </p>
                 </div>
               ))}
             </div>
@@ -234,70 +726,172 @@
         );
       }
 
-      function loadScript(src) {
-        return new Promise((resolve, reject) => {
-          const script = document.createElement("script");
-          const timeout = window.setTimeout(() => {
-            script.remove();
-            reject(new Error(`Script load timeout: ${src}`));
-          }, 8000);
-
-          script.src = src;
-          script.async = true;
-          script.onload = () => {
-            window.clearTimeout(timeout);
-            resolve();
-          };
-          script.onerror = () => {
-            window.clearTimeout(timeout);
-            script.remove();
-            reject(new Error(`Script load failed: ${src}`));
-          };
-          document.head.appendChild(script);
-        });
+      function PrintSummaryCard({ label, value }) {
+        return (
+          <div className="print-summary-card">
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </div>
+        );
       }
 
-      async function ensurePdfLibraries() {
-        const html2canvasSources = [
-          "./vendor/html2canvas.min.js",
-          "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js",
-          "https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js",
-          "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-        ];
-        const jsPdfSources = [
-          "./vendor/jspdf.umd.min.js",
-          "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js",
-          "https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js",
-          "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-        ];
+      function PrintRoleResultTable({ roles }) {
+        return (
+          <section className="print-section">
+            <h2>역할별 결과</h2>
+            <table className="print-table">
+              <thead>
+                <tr>
+                  <th>역할</th>
+                  <th>작업 시간</th>
+                  <th>MM</th>
+                  <th>비중</th>
+                </tr>
+              </thead>
+              <tbody>
+                {roles.map((role) => (
+                  <tr key={role.id}>
+                    <td>{role.chartLabel}</td>
+                    <td>{formatHours(role.hours)}</td>
+                    <td>{formatMM(role.mm)}</td>
+                    <td>{formatPercent(role.percent)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        );
+      }
 
-        if (!window.html2canvas) {
-          for (const src of html2canvasSources) {
-            try {
-              await loadScript(src);
-              if (window.html2canvas) break;
-            } catch (error) {}
-          }
+      function PrintPieChart({ result }) {
+        if (result.totalHours <= 0) {
+          return (
+            <section className="print-section">
+              <h2>역할별 투입 비중 차트</h2>
+              <p>작업 시간이 없어 차트를 표시하지 않습니다.</p>
+            </section>
+          );
         }
 
-        if (!window.jspdf?.jsPDF) {
-          for (const src of jsPdfSources) {
-            try {
-              await loadScript(src);
-              if (window.jspdf?.jsPDF) break;
-            } catch (error) {}
-          }
-        }
+        let currentAngle = 0;
+        const slices = result.roleResults
+          .filter((role) => role.hours > 0)
+          .map((role) => {
+            const angle = (role.hours / result.totalHours) * 360;
+            const startAngle = currentAngle;
+            const endAngle = currentAngle + angle;
+            const labelPoint = polarToCartesian(150, 150, 86, startAngle + angle / 2);
+            currentAngle = endAngle;
+            return { ...role, startAngle, endAngle, labelPoint };
+          });
 
-        if (!window.html2canvas || !window.jspdf?.jsPDF) {
-          throw new Error("PDF libraries are not available.");
-        }
+        return (
+          <section className="print-section print-chart">
+            <h2>역할별 투입 비중 차트</h2>
+            <div className="print-pie-wrap">
+              <svg viewBox="0 0 300 300" className="print-pie" aria-label="역할별 투입 비중 차트">
+                {slices.map((role) => (
+                  <path
+                    key={role.id}
+                    d={describeArc(150, 150, 126, role.startAngle, role.endAngle)}
+                    fill={printChartColors[role.id]}
+                    stroke="#ffffff"
+                    strokeWidth="3"
+                  />
+                ))}
+                <circle cx="150" cy="150" r="54" fill="#ffffff" />
+                <text x="150" y="146" textAnchor="middle" className="fill-slate-600 text-[13px] font-bold">
+                  총 작업
+                </text>
+                <text x="150" y="168" textAnchor="middle" className="fill-navy text-[18px] font-extrabold">
+                  {formatHours(result.totalHours)}
+                </text>
+                {slices.map((role) => (
+                  <text
+                    key={`${role.id}-print-label`}
+                    x={role.labelPoint.x}
+                    y={role.labelPoint.y}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className="fill-white text-[12px] font-extrabold"
+                  >
+                    {formatPercent(role.percent)}
+                  </text>
+                ))}
+              </svg>
+              <div>
+                {result.roleResults.map((role) => (
+                  <div className="print-legend-row" key={role.id}>
+                    <span>
+                      <i className="print-dot" style={{ backgroundColor: printChartColors[role.id] }}></i>
+                      {role.chartLabel}
+                    </span>
+                    <strong>{formatPercent(role.percent)}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      function PrintBarChart({ result }) {
+        const maxMM = Math.max(...result.roleResults.map((role) => role.mm), 1);
+
+        return (
+          <section className="print-section print-chart">
+            <h2>역할별 MM 비교 차트</h2>
+            {result.roleResults.map((role) => (
+              <div className="print-bar-row" key={role.id}>
+                <div className="print-bar-label">{role.chartLabel}</div>
+                <div className="print-bar-track">
+                  <div
+                    className="print-bar-fill"
+                    style={{
+                      width: `${role.mm > 0 ? Math.max((role.mm / maxMM) * 100, 7) : 0}%`,
+                      backgroundColor: printChartColors[role.id]
+                    }}
+                  >
+                    {role.mm > 0 ? formatMM(role.mm) : ""}
+                  </div>
+                </div>
+                <div className="print-bar-value">{formatMM(role.mm)}</div>
+              </div>
+            ))}
+          </section>
+        );
+      }
+
+      function PrintReport({ projectName, result }) {
+        const topRoleText =
+          result.topRole?.hours > 0
+            ? `${result.topRole.chartLabel} (${formatHours(result.topRole.hours)}, ${formatPercent(result.topRole.percent)})`
+            : "-";
+
+        return (
+          <section className="print-report" aria-hidden="true">
+            <div className="print-cover">
+              <h1>프로젝트 공수 분석 리포트</h1>
+              <p>{projectName.trim() || "프로젝트명 미입력"}</p>
+              <div className="print-meta">내부 검토용 리포트</div>
+            </div>
+
+            <div className="print-summary-grid">
+              <PrintSummaryCard label="총 작업 시간" value={formatHours(result.totalHours)} />
+              <PrintSummaryCard label="총 MM" value={formatMM(result.totalMM)} />
+              <PrintSummaryCard label="1MM 기준 시간" value={formatHours(result.standardHours)} />
+              <PrintSummaryCard label="가장 많이 투입된 역할" value={topRoleText} />
+            </div>
+
+            <PrintRoleResultTable roles={result.roleResults} />
+            <PrintPieChart result={result} />
+            <PrintBarChart result={result} />
+          </section>
+        );
       }
 
       function App() {
-        const resultRef = useRef(null);
         const [projectName, setProjectName] = useState("");
-        const [isPdfCreating, setIsPdfCreating] = useState(false);
         const [mmStandardHours, setMmStandardHours] = useState(160);
         const [roleHours, setRoleHours] = useState(
           roles.reduce((acc, role) => ({ ...acc, [role.id]: role.initialHours }), {})
@@ -337,199 +931,192 @@
           setRoleHours((current) => ({ ...current, [roleId]: value }));
         }
 
-        async function handlePdfDownload() {
-          if (!resultRef.current || isPdfCreating) {
-            return;
+        function handlePrint() {
+          const originalTitle = document.title;
+          const printFileName = createPrintFileName(projectName);
+
+          function restoreTitle() {
+            document.title = originalTitle;
+            window.removeEventListener("afterprint", restoreTitle);
           }
 
-          try {
-            setIsPdfCreating(true);
-            await ensurePdfLibraries();
-
-            const canvas = await window.html2canvas(resultRef.current, {
-              backgroundColor: "#ffffff",
-              scale: 2,
-              useCORS: true
-            });
-            const imageData = canvas.toDataURL("image/png");
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF("p", "mm", "a4");
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const margin = 8;
-            const imageWidth = pageWidth - margin * 2;
-            const imageHeight = (canvas.height * imageWidth) / canvas.width;
-            let remainingHeight = imageHeight;
-            let y = margin;
-
-            pdf.addImage(imageData, "PNG", margin, y, imageWidth, imageHeight);
-            remainingHeight -= pageHeight - margin * 2;
-
-            while (remainingHeight > 0) {
-              pdf.addPage();
-              y = margin - (imageHeight - remainingHeight);
-              pdf.addImage(imageData, "PNG", margin, y, imageWidth, imageHeight);
-              remainingHeight -= pageHeight - margin * 2;
-            }
-
-            pdf.save(`${projectName.trim() || "공수계산기"}-MM-결과.pdf`);
-          } catch (error) {
-            alert("PDF 생성 중 오류가 발생했습니다.");
-          } finally {
-            setIsPdfCreating(false);
-          }
+          document.title = printFileName;
+          window.addEventListener("afterprint", restoreTitle, { once: true });
+          window.print();
         }
 
         return (
           <main className="min-h-screen bg-white">
-            <section className="border-b border-line bg-mist">
-              <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:py-10">
-                <div>
-                  <h1 className="text-3xl font-extrabold tracking-normal text-ink sm:text-4xl">
-                    공수계산기
-                  </h1>
-                  <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-                    실제 작업 시간을 역할별로 입력해 MM, 총 작업 시간, 역할별 비중을 계산합니다.
-                  </p>
+            <div className="app-screen">
+              <section className="border-b border-line bg-mist">
+                <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:py-10">
+                  <div>
+                    <h1 className="text-3xl font-extrabold tracking-normal text-ink sm:text-4xl">
+                      공수계산기
+                    </h1>
+                    <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
+                      실제 작업 시간을 역할별로 입력해 MM, 총 작업 시간, 역할별 비중을 계산합니다.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-line bg-white px-4 py-3 text-sm font-semibold text-navy shadow-sm">
+                    1MM = {formatHours(result.standardHours)}
+                  </div>
                 </div>
-                <div className="rounded-lg border border-line bg-white px-4 py-3 text-sm font-semibold text-navy shadow-sm">
-                  1MM = {formatHours(result.standardHours)}
-                </div>
-              </div>
-            </section>
+              </section>
 
-            <section className="mx-auto grid max-w-7xl gap-6 px-5 py-6 sm:px-8 lg:grid-cols-[390px_1fr] lg:py-8">
-              <form className="rounded-lg border border-line bg-white p-5 shadow-soft sm:p-6">
-                <div className="mb-6">
-                  <h2 className="text-lg font-bold text-ink">작업 시간 입력</h2>
-                  <p className="mt-1 text-sm text-slate-500">
-                    역할별 실제 작업 시간을 입력하면 MM과 비중이 즉시 업데이트됩니다.
-                  </p>
-                </div>
+              <section className="mx-auto grid max-w-7xl gap-6 px-5 py-6 sm:px-8 lg:grid-cols-[390px_1fr] lg:py-8">
+                <form className="rounded-lg border border-line bg-white p-5 shadow-soft sm:p-6">
+                  <div className="mb-6">
+                    <h2 className="text-lg font-bold text-ink">작업 시간 입력</h2>
+                    <p className="mt-1 text-sm text-slate-500">
+                      역할별 실제 작업 시간을 입력하면 MM과 비중이 즉시 업데이트됩니다.
+                    </p>
+                  </div>
 
-                <div className="space-y-5">
-                  <TextField
-                    id="project-name"
-                    label="프로젝트명"
-                    value={projectName}
-                    placeholder="선택 입력"
-                    onChange={setProjectName}
-                  />
-
-                  <NumberField
-                    id="mm-standard-hours"
-                    label="1MM 기준 시간"
-                    value={mmStandardHours}
-                    min={0.1}
-                    suffix="h"
-                    onChange={setMmStandardHours}
-                  />
-
-                  <div className="h-px bg-line"></div>
-
-                  {roles.map((role) => (
-                    <RoleInput
-                      key={role.id}
-                      role={role}
-                      value={roleHours[role.id]}
-                      onChange={updateRoleHours}
+                  <div className="space-y-5">
+                    <TextField
+                      id="project-name"
+                      label="프로젝트명"
+                      value={projectName}
+                      placeholder="선택 입력"
+                      onChange={setProjectName}
                     />
-                  ))}
-                </div>
-              </form>
 
-              <div className="space-y-6">
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={handlePdfDownload}
-                    disabled={isPdfCreating}
-                    className="rounded-lg bg-navy px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#17385f] focus:outline-none focus:ring-4 focus:ring-navy/20 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    PDF 다운로드
-                  </button>
-                </div>
+                    <NumberField
+                      id="mm-standard-hours"
+                      label="1MM 기준 시간"
+                      value={mmStandardHours}
+                      min={0.1}
+                      suffix="h"
+                      onChange={setMmStandardHours}
+                    />
 
-                <div ref={resultRef} className="space-y-6 bg-white">
-                  {projectName.trim() && (
-                    <div className="rounded-lg border border-line bg-white p-5 shadow-soft">
-                      <p className="text-sm font-semibold text-slate-500">프로젝트명</p>
-                      <p className="mt-1 text-xl font-extrabold text-ink">
-                        {projectName.trim()}
+                    <div className="h-px bg-line"></div>
+
+                    {roles.map((role) => (
+                      <RoleInput
+                        key={role.id}
+                        role={role}
+                        value={roleHours[role.id]}
+                        onChange={updateRoleHours}
+                      />
+                    ))}
+                  </div>
+                </form>
+
+                <div className="space-y-6">
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handlePrint}
+                      className="rounded-lg bg-navy px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#17385f] focus:outline-none focus:ring-4 focus:ring-navy/20 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      PDF 저장/인쇄
+                    </button>
+                  </div>
+
+                  <div className="space-y-6 bg-white p-1">
+                    <div className="pdf-avoid-break rounded-lg border border-line bg-mist p-5 shadow-soft sm:p-6">
+                      <h2 className="text-2xl font-extrabold tracking-normal text-ink">
+                        프로젝트 공수 분석 리포트
+                      </h2>
+                      <p className="mt-2 text-sm font-bold text-navy">
+                        내부 검토용 리포트
                       </p>
                     </div>
-                  )}
 
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <MetricCard
-                      label="총 작업 시간"
-                      value={formatHours(result.totalHours)}
-                      note="모든 역할 작업 시간 합계"
-                    />
-                    <MetricCard
-                      label="총 MM"
-                      value={formatMM(result.totalMM)}
-                      note={`${formatHours(result.totalHours)} / ${formatHours(result.standardHours)}`}
-                      tone="primary"
-                    />
-                    <MetricCard
-                      label="가장 많이 투입된 역할"
-                      value={result.topRole?.hours > 0 ? result.topRole.label : "-"}
-                      note={
-                        result.topRole?.hours > 0
-                          ? `${formatHours(result.topRole.hours)} · ${formatPercent(result.topRole.percent)}`
-                          : "작업 시간을 입력하세요"
-                      }
-                    />
-                  </div>
-
-                  <AllocationChart roles={result.roleResults} />
-
-                  <div className="rounded-lg border border-line bg-white p-5 shadow-soft sm:p-6">
-                    <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                      <div>
-                        <h2 className="text-lg font-bold text-ink">역할별 MM 분석</h2>
-                        <p className="mt-1 text-sm text-slate-500">
-                          역할별 작업 시간, MM, 전체 비중을 함께 확인합니다.
+                    {projectName.trim() && (
+                      <div className="pdf-avoid-break rounded-lg border border-line bg-white p-5 shadow-soft">
+                        <p className="text-sm font-semibold text-slate-500">프로젝트명</p>
+                        <p className="mt-1 text-xl font-extrabold text-ink">
+                          {projectName.trim()}
                         </p>
                       </div>
-                      <div className="w-fit rounded-lg bg-mist px-3 py-2 text-sm font-bold text-navy">
-                        총 {formatMM(result.totalMM)}
+                    )}
+
+                    <div className="pdf-avoid-break grid gap-4 md:grid-cols-3">
+                      <MetricCard
+                        label="총 작업 시간"
+                        value={formatHours(result.totalHours)}
+                        note="모든 역할 작업 시간 합계"
+                      />
+                      <MetricCard
+                        label="총 MM"
+                        value={formatMM(result.totalMM)}
+                        note={`${formatHours(result.totalHours)} / ${formatHours(result.standardHours)}`}
+                        tone="primary"
+                      />
+                      <MetricCard
+                        label="가장 많이 투입된 역할"
+                        value={result.topRole?.hours > 0 ? result.topRole.label : "-"}
+                        note={
+                          result.topRole?.hours > 0
+                            ? `${formatHours(result.topRole.hours)} · ${formatPercent(result.topRole.percent)}`
+                            : "작업 시간을 입력하세요"
+                        }
+                      />
+                    </div>
+
+                    <div className="pdf-avoid-break">
+                      <AllocationPieChart
+                        roles={result.roleResults}
+                        totalHours={result.totalHours}
+                      />
+                    </div>
+
+                    <div className="pdf-avoid-break">
+                      <RoleMmBarChart roles={result.roleResults} />
+                    </div>
+
+                    <div className="pdf-avoid-break rounded-lg border border-line bg-white p-5 shadow-soft sm:p-6">
+                      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                          <h2 className="text-lg font-bold text-ink">역할별 MM 분석</h2>
+                          <p className="mt-1 text-sm text-slate-500">
+                            역할별 작업 시간, MM, 전체 비중을 함께 확인합니다.
+                          </p>
+                        </div>
+                        <div className="w-fit rounded-lg bg-mist px-3 py-2 text-sm font-bold text-navy">
+                          총 {formatMM(result.totalMM)}
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        {result.roleResults.map((role) => (
+                          <div key={role.id} className="pdf-avoid-break">
+                            <RoleResultRow role={role} />
+                          </div>
+                        ))}
                       </div>
                     </div>
 
-                    <div className="space-y-3">
-                      {result.roleResults.map((role) => (
-                        <RoleResultRow key={role.id} role={role} />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="rounded-lg border border-line bg-mist p-5">
-                    <div className="grid gap-4 text-sm sm:grid-cols-3">
-                      <div>
-                        <p className="font-semibold text-slate-500">계산식</p>
-                        <p className="mt-1 text-lg font-extrabold text-ink">
-                          작업 시간 / 1MM 기준 시간
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-slate-500">예시 기준</p>
-                        <p className="mt-1 text-lg font-extrabold text-ink">
-                          160h = 1.0MM
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-slate-500">현재 총합</p>
-                        <p className="mt-1 text-lg font-extrabold text-ink">
-                          {formatHours(result.totalHours)} = {formatMM(result.totalMM)}
-                        </p>
+                    <div className="pdf-avoid-break rounded-lg border border-line bg-mist p-5">
+                      <div className="grid gap-4 text-sm sm:grid-cols-3">
+                        <div>
+                          <p className="font-semibold text-slate-500">계산식</p>
+                          <p className="mt-1 text-lg font-extrabold text-ink">
+                            작업 시간 / 1MM 기준 시간
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-500">예시 기준</p>
+                          <p className="mt-1 text-lg font-extrabold text-ink">
+                            160h = 1.0MM
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-500">현재 총합</p>
+                          <p className="mt-1 text-lg font-extrabold text-ink">
+                            {formatHours(result.totalHours)} = {formatMM(result.totalMM)}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            </div>
+            <PrintReport projectName={projectName} result={result} />
 
           </main>
         );
